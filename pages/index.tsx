@@ -1,15 +1,13 @@
 import { useState } from 'react';
+import NavBar from '../components/NavBar';
 
 export default function Home() {
-    const [counter, setCounter] = useState(0);
-    
     return (
-        <div>
-            <h1>Hello {counter}</h1>
-            <button onClick={() => setCounter(ele => ele + 1)}>+</button>
-        </div>
-    )
-       
+        <>
+        <NavBar/>
+        <div>Home</div>
+        </>
+    )       
 }
 
 /* create react-app만을 한다면, React router DOM을 다운 받아야하고 
