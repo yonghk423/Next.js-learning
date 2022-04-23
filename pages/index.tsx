@@ -8,6 +8,10 @@ interface SetData {
   id:number;
   original_title:string;
 }
+/*api요청으로 data를 받아온 값을 useState 값으로 받아서 사용하려면 
+사용하고자하는 데이터들의 속성 타입을 지정해줘야 한다. useState의 타입을 지정할 때는 
+제네릭을 사용한다 */ 
+
 
 export default function Home() {
   const [movies, setMovies] = useState<SetData[]>([])
@@ -18,7 +22,7 @@ export default function Home() {
             `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
       )).json();
       setMovies(results);
-    })();
+    })(); // ---> aysnc 부분이 익명 함수(재사용 불가)로 작성되었고, 익명 함수는 즉시 실행해야 하기 때문에 ()를 이용해 익명 함수를 바로 호출하는 것
   } ,[]) 
     return ( 
         <div>
