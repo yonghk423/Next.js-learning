@@ -1,8 +1,12 @@
+import Head from "next/head";
+import Seo from './Seo';
+
 export default function About() {
     return (
-        <>
-        <div>about</div>
-       </>
+      <>
+        <Seo title="Home"/>
+        <h1>about</h1>
+      </>
     )
        
 }

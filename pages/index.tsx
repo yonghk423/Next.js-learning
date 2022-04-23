@@ -1,8 +1,11 @@
+import Head from "next/head";
+import Seo from './Seo';
 
 export default function Home() {
-    return (
+    return ( 
         <div>
-          <h1 className="active">Hello</h1>
+          <Seo title="Home"/> 
+          <h1>Hello</h1>
         </div>
     )       
 }
