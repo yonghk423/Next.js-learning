@@ -1,13 +1,36 @@
 import Head from "next/head";
 import Seo from './Seo';
+import { useEffect, useState  } from 'react';
+
+const API_KEY = "4c5d0a3408a359c4fa9760f4856529bc";
+
+interface SetData {
+  id:number;
+  original_title:string;
+}
 
 export default function Home() {
+  const [movies, setMovies] = useState<SetData[]>([])
+  useEffect(() => {
+    (async () => {
+      const { results } = await 
+       (await fetch(
+            `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
+      )).json();
+      setMovies(results);
+    })();
+  } ,[]) 
     return ( 
         <div>
           <Seo title="Home"/> 
-          <h1>Hello</h1>
+          {!movies && <h4>Loading...</h4>}
+          {movies?.map((movie) => (
+            <div key={movie.id}>
+              <h4>{movie.original_title}</h4>
+            </div>
+          ))}
         </div>
-    )       
+    )        
 }
 
 /* create react-app만을 한다면, React router DOM을 다운 받아야하고 
