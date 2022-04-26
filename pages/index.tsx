@@ -1,6 +1,8 @@
 import Seo from './Seo';
-import { useEffect, useState  } from 'react';
+import { useEffect, useReducer, useState  } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface SetData {
   id:number;
@@ -13,6 +15,18 @@ interface SetData {
 
 
 export default function Home({ results }: InferGetServerSidePropsType<GetServerSideProps>) {
+  const router = useRouter();
+  const onClick = (id:number, title:string) => {
+    router.push({
+      pathname: `/movies/${id}`,
+      query: {
+        id,
+        title,
+      },
+    },
+    `/movies/${id}`  
+    )
+  }
   // const [movies, setMovies] = useState<SetData[]>([])
   // useEffect(() => {
   //   (async () => {
@@ -22,14 +36,18 @@ export default function Home({ results }: InferGetServerSidePropsType<GetServerS
   //   })(); // ---> aysnc 부분이 익명 함수(재사용 불가)로 작성되었고, 익명 함수는 즉시 실행해야 하기 때문에 ()를 이용해 익명 함수를 바로 호출하는 것
   // } ,[]) 
     return ( 
-        <div className='container'>
+        <div className='container' >
           <Seo title="Home"/> 
           {/* {movies.length === 0 && <h1>Loading...</h1>} */}
           {results?.map((movie: SetData) => (
-            <div className="movie" key={movie.id}>
-              <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
-              <h4>{movie.original_title}</h4>
-            </div>
+          <div onClick={() => onClick(movie.id, movie.original_title)} className="movie" key={movie.id}>
+            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} />
+              <h4>
+                <Link href={`/movies/${movie.id}`} >  
+                  <a>{movie.original_title}</a>
+                </Link>
+              </h4>                       
+          </div>   
           ))}
           <style jsx>{`
             .container {
