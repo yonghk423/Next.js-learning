@@ -1,5 +1,6 @@
 import Seo from './Seo';
 import { useEffect, useState  } from 'react';
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
 interface SetData {
   id:number;
@@ -11,20 +12,20 @@ interface SetData {
 제네릭을 사용한다 */ 
 
 
-export default function Home() {
-  const [movies, setMovies] = useState<SetData[]>([])
-  useEffect(() => {
-    (async () => {
-      const { results } = await 
-       (await fetch(`/api/movies`)).json();
-      setMovies(results);
-    })(); // ---> aysnc 부분이 익명 함수(재사용 불가)로 작성되었고, 익명 함수는 즉시 실행해야 하기 때문에 ()를 이용해 익명 함수를 바로 호출하는 것
-  } ,[]) 
+export default function Home({ results }: InferGetServerSidePropsType<GetServerSideProps>) {
+  // const [movies, setMovies] = useState<SetData[]>([])
+  // useEffect(() => {
+  //   (async () => {
+  //     const { results } = await 
+  //      (await fetch(`/api/movies`)).json();
+  //     setMovies(results);
+  //   })(); // ---> aysnc 부분이 익명 함수(재사용 불가)로 작성되었고, 익명 함수는 즉시 실행해야 하기 때문에 ()를 이용해 익명 함수를 바로 호출하는 것
+  // } ,[]) 
     return ( 
         <div className='container'>
           <Seo title="Home"/> 
-          {!movies && <h4>Loading...</h4>}
-          {movies?.map((movie) => (
+          {/* {movies.length === 0 && <h1>Loading...</h1>} */}
+          {results?.map((movie: SetData) => (
             <div className="movie" key={movie.id}>
               <img src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
               <h4>{movie.original_title}</h4>
@@ -51,11 +52,21 @@ export default function Home() {
               text-align: center;
             }
           `}</style>
-
         </div>
     )        
 }
 
+export async function getServerSideProps({}: GetServerSideProps) {
+      const { results } = await ( 
+        await fetch(`http://localhost:3000/api/movies`)
+        ).json();
+      return {
+        props: {
+          results,
+        }, 
+      };
+}
+ 
 /* create react-app만을 한다면, React router DOM을 다운 받아야하고 
 router를 만들고 router를 설계하고 component를 import하고 router를 render하는 모든 과정을 
 next.js는 이 모든 것들이 전부 되어있다 확실히 편하다. 
